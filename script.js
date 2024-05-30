@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     var balanceElement = document.getElementById("balance");
     var countElement = document.getElementById("count");
-    var timerElement = document.getElementById("timer");
-    var startButton = document.getElementById("startButton");
+    var daysElement = document.getElementById("daysUntilLaunch");
 
     var balance = 0;
     var miningRates = {
@@ -19,30 +18,16 @@ document.addEventListener('DOMContentLoaded', function() {
         countElement.textContent = balance.toFixed(10);
     }
 
-    function updateTimer() {
-        var now = new Date().getTime();
-        var countdownTime = now + 96 * 60 * 60 * 1000;
-        var interval = setInterval(function() {
-            var distance = countdownTime - now;
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            timerElement.textContent = `${days}:${hours.toLocaleString('en-US', {minimumIntegerDigits: 2})}:${minutes.toLocaleString('en-US', {minimumIntegerDigits: 2})}:${seconds.toLocaleString('en-US', {minimumIntegerDigits: 2})}`;
-
-            if (distance < 0) {
-                clearInterval(interval);
-                timerElement.textContent = "00:00:00:00";
-                startButton.disabled = false;
-            }
-            now += 1000; // Update current time every second
-        }, 1000);
+    function updateDaysUntilLaunch() {
+        var days = parseInt(daysElement.textContent, 10);
+        if (days > 0) {
+            days -= 1;
+            daysElement.textContent = days;
+        }
     }
 
-    startButton.addEventListener("click", function() {
+    document.getElementById("startButton").addEventListener("click", function() {
         setInterval(updateBalance, 100); // Update every 0.1 second
+        setInterval(updateDaysUntilLaunch, 86400000); // Update every 24 hours (86400000 ms)
     });
-
-    updateTimer();
 });
