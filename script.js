@@ -1,16 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
     var balanceElement = document.getElementById("balance");
     var countElement = document.getElementById("count");
-    var daysElement = document.getElementById("daysUntilLaunch");
 
-    var balance = 0;
+    var balance = 10.14691900;
     var miningRates = {
-        hour: 2 / 3600,  // 2 YNG per hour
-        day: 30 / 86400, // 30 YNG per day
-        week: 280 / 604800 // 280 YNG per week
+        day: 0.0003277300,  // Rate per day
+        week: 0.0022940900, // Rate per week
+        month: 0.0101595600 // Rate per month
     };
 
-    var totalMiningRate = miningRates.hour + miningRates.day + miningRates.week;
+    var totalMiningRate = miningRates.day / 86400 + miningRates.week / 604800 + miningRates.month / 2592000;
 
     function updateBalance() {
         balance += totalMiningRate * 0.1; // Update every 0.1 second
@@ -18,16 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         countElement.textContent = balance.toFixed(10);
     }
 
-    function updateDaysUntilLaunch() {
-        var days = parseInt(daysElement.textContent, 10);
-        if (days > 0) {
-            days -= 1;
-            daysElement.textContent = days;
-        }
-    }
-
     document.getElementById("startButton").addEventListener("click", function() {
         setInterval(updateBalance, 100); // Update every 0.1 second
-        setInterval(updateDaysUntilLaunch, 86400000); // Update every 24 hours (86400000 ms)
     });
 });
